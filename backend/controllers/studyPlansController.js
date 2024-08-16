@@ -120,6 +120,7 @@ const updateStudyPlanById = async (req, res) => {
         if (req.body.taskName) {
             task.taskName = req.body.taskName;
         }
+        
         if (typeof req.body.completed !== 'undefined') {
             task.completed = req.body.completed;
         }

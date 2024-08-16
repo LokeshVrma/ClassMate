@@ -68,7 +68,7 @@ const viewAssignmentById = async (req, res) => {
         }
 
         // Query the database for the specific assignment belonging to this user
-        const assignment = await Assignment.findOne({ userId, _id: assignmentId });
+        const assignment = await Assignment.findOne({ userId, assignmentId: assignmentId });
 
         // If the assignment is not found, send a 404 Not Found response
         if (!assignment) {
@@ -89,7 +89,7 @@ const updateAssignmentById = async (req, res) => {
     try {
         // Extract userId from the authenticated user and assignmentId from request parameters
         const userId = req.user.userId;
-        const { assignmentId } = req.params;
+        const { assignmentId, fileId } = req.params;
 
         // Check if the userId is available (authentication check)
         if (!userId) {
@@ -97,13 +97,20 @@ const updateAssignmentById = async (req, res) => {
         }
 
         // Query the database for the specific assignment belonging to this user
-        const assignment = await Assignment.findOne({ userId, _id: assignmentId });
+        const assignment = await Assignment.findOne({ userId, assignmentId: assignmentId });
 
         // If the assignment is not found, send a 404 Not Found response
         if (!assignment) {
             return res.status(404).json({ message: 'Assignment not found' });
         }
 
+        // Find the specific file within the files array
+        const file = assignment.files.find(file => file.fileId.equals(fileId));
+
+        if (!file) {
+            return res.status(404).json({ message: 'File not found' })
+        }
+        
         // Update the assignment fields with the new data from the request body (if provided)
         if (req.body.title) {
             assignment.title = req.body.title;
@@ -125,8 +132,11 @@ const updateAssignmentById = async (req, res) => {
             assignment.status = req.body.status;
         }
 
-        if (req.body.files) {
-            assignment.files = req.body.files;
+        if (req.body.fileName) {
+            file.fileName = req.body.fileName;
+        }
+        if (typeof req.body.completed !== 'undefined') {
+            task.completed = req.body.completed;
         }
 
         // Save the updated assignment to the database
@@ -154,7 +164,7 @@ const deleteAssignmentById = async (req, res) => {
         }
 
         // Query the database to delete the specific assignment belonging to this user
-        const assignment = await Assignment.findOneAndDelete({ userId, _id: assignmentId });
+        const assignment = await Assignment.findOneAndDelete({ userId, assignmentId: assignmentId });
         
         // If the assignment is not found, send a 404 Not Found response
         if (!assignment) {

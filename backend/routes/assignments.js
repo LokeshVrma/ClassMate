@@ -6,7 +6,7 @@ const { authenticateJWT } = require('../middleware/authMiddleware');
 router.post('', authenticateJWT, newAssignment);
 router.get('', authenticateJWT, allAssignment);
 router.get('/:assignmentId', authenticateJWT, viewAssignmentById);
-router.put('/:assignmentId', authenticateJWT, updateAssignmentById);
+router.put('/:assignmentId/files/:fileId', authenticateJWT, updateAssignmentById);
 router.delete('/:assignmentId', authenticateJWT, deleteAssignmentById);
 
 module.exports = router;
