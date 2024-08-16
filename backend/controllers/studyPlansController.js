@@ -80,7 +80,7 @@ const findStudyPlanById = async (req, res) => {
 const updateStudyPlanById = async (req, res) => {
     try {
         const userId = req.user.userId; // Retrieve userId from authenticated user
-        const { planId } = req.params; // Extract planId from URL parameters
+        const { planId, taskId } = req.params; // Extract planId and taskId from URL parameters
 
         // Ensure that the userId is present
         if (!userId) {
@@ -93,6 +93,14 @@ const updateStudyPlanById = async (req, res) => {
         // If no study plan is found, return a 404 error
         if (!studyPlan) {
             return res.status(404).json({ message: 'Study plan not found' });
+        }
+
+        // Find the specific task within the tasks array
+        const task = studyPlan.tasks.find(task => task.taskId.equals(taskId));
+        
+        // If the task is not found, return a 404 error
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
         }
 
         // Update fields if they are provided in the request body
@@ -108,8 +116,12 @@ const updateStudyPlanById = async (req, res) => {
         if (req.body.endDate) {
             studyPlan.endDate = req.body.endDate;
         }
-        if (req.body.tasks) {
-            studyPlan.tasks = req.body.tasks;
+        
+        if (req.body.taskName) {
+            task.taskName = req.body.taskName;
+        }
+        if (typeof req.body.completed !== 'undefined') {
+            task.completed = req.body.completed;
         }
 
         // Save the updated study plan to the database
