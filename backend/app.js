@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const studyPlansRoutes = require('./routes/studyPlans');
+const assignmentRoutes = require('./routes/assignments');
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +24,8 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/study-plans', studyPlansRoutes);
+app.use('/api/assignments', assignmentRoutes);
+
 
 app.get('/', (req, res) => {
     res.send("worked");

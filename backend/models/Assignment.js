@@ -6,6 +6,11 @@ const assignmentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    assignmentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        auto: true,
+        unique:true
+    },
     title: {
         type: String,
         required: true
@@ -31,7 +36,8 @@ const assignmentSchema = new mongoose.Schema({
         {
             fileId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'File'
+                ref: 'File',
+                auto: true
             },
             fileName: {
                 type: String,
