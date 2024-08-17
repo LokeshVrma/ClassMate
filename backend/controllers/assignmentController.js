@@ -6,6 +6,11 @@ const newAssignment = async (req, res) => {
         // Extract userId from the authenticated user (req.user)
         const userId = req.user.userId;
 
+        // Ensure that the userId is present
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized: No user ID provided' });
+        }
+        
         // Destructure assignment details from the request body
         const { title, description, subject, dueDate, status, files } = req.body;
 
@@ -136,7 +141,7 @@ const updateAssignmentById = async (req, res) => {
             file.fileName = req.body.fileName;
         }
         if (typeof req.body.completed !== 'undefined') {
-            task.completed = req.body.completed;
+            file.completed = req.body.completed;
         }
 
         // Save the updated assignment to the database

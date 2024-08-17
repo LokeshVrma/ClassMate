@@ -5,6 +5,11 @@ const newStudyPlan = async (req, res) => {
     try {
         const userId = req.user.userId; // Retrieve userId from authenticated user
 
+        // Ensure that the userId is present
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized: No user ID provided' });
+        }
+        
         // Destructure required fields from the request body
         const { title, description, startDate, endDate, tasks } = req.body;
 
