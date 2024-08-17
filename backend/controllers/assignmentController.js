@@ -29,7 +29,7 @@ const newAssignment = async (req, res) => {
         await newAssignment.save();
 
         // Respond with success message upon successful creation
-        return res.status(200).json({ message: 'New Assignment Created Successfully' });
+        return res.status(201).json({ message: 'New Assignment Created Successfully' });
     } 
     catch (error) {
         // Handle any errors and send a 500 Internal Server Error response

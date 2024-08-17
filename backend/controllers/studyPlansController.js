@@ -31,7 +31,7 @@ const newStudyPlan = async (req, res) => {
         // Save the new study plan to the database
         await newStudyPlan.save();
 
-        return res.status(200).json({ message: 'Study Plan created successfully' });
+        return res.status(201).json({ message: 'Study Plan created successfully' });
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error' });
     }

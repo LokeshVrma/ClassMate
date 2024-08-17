@@ -7,6 +7,7 @@ const usersRoutes = require('./routes/users');
 const studyPlansRoutes = require('./routes/studyPlans');
 const assignmentRoutes = require('./routes/assignments');
 const notesRoutes = require('./routes/notes');
+const forumsRoutes = require('./routes/forums');
 require('dotenv').config();
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/study-plans', studyPlansRoutes);
 app.use('/api/assignments', assignmentRoutes);
 app.use('/api/notes', notesRoutes);
+app.use('/api/forums', forumsRoutes);
 
 app.get('/', (req, res) => {
     res.send("worked");
