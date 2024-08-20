@@ -48,3 +48,13 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
     console.log(`Server Started at ${PORT}`);
 })
+
+// Handle Uncaught Exceptions and Rejections
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+});
