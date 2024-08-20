@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const connectDB = require('./config/db');
+// const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Database Connection
-connectDB();
+// connectDB();
 
 // Middleware
 app.use(cors({
@@ -59,7 +59,7 @@ process.on('unhandledRejection', (err) => {
     console.error('Unhandled Rejection:', err);
 });
 
-connectDB().catch(err => {
-    console.error("Database connection error:", err);
-    process.exit(1); // Exit process if the database connection fails
-});
+// connectDB().catch(err => {
+//     console.error("Database connection error:", err);
+//     process.exit(1); 
+// });
