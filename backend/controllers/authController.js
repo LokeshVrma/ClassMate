@@ -155,7 +155,9 @@ const loginUser = async (req, res) => {
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
 
         // Return a success response
-        return res.status(200).json({ message: 'Logged in successfully' });
+        return res.status(200).json({ message: 'Logged in successfully',
+            user: { id: user._id, name: user.name, role: user.role } 
+         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' });
