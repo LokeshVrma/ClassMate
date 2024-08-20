@@ -36,7 +36,11 @@ app.use('/api/notes', notesRoutes);
 app.use('/api/forums', forumsRoutes);
 
 app.get('/', (req, res) => {
-    res.send("API is working");
+    res.status(200).send("API is working");
+})
+
+app.get('/api/ping', (req, res) => {
+    res.status(200).json({ message: 'Connected to backend' });
 })
 
 // Global Error Handler
