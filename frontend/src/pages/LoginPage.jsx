@@ -27,6 +27,7 @@ function LoginPage() {
         event.preventDefault();
 
         try {
+            // eslint-disable-next-line no-unused-vars
             const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, {
                 email,
                 password
