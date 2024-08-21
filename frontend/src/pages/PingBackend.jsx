@@ -8,7 +8,7 @@ const PingBackend = () => {
   const checkBackend = async () => {
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}api/ping`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/ping`);
       setStatus(`Backend is up and running.`);
       setError(null);
     } catch (err) {

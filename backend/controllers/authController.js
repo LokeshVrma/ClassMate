@@ -17,8 +17,15 @@ const registerUser = async (req, res) => {
             studentID: req.body.studentID,
             profileImage: req.body.profileImage,
         });
-
-        await newUser.save();
+        
+        const user = await User.findOne({ email:req.body.email });
+        if(!user) {
+            await newUser.save();
+            res.status(200).json({ message: 'Registration successful, please check your email to verify your account.' });
+        }
+        else {
+            return res.status(409).json({ message: "User already exists" });
+        }
 
         // Generate a verification token for email verification
         const token = crypto.randomBytes(32).toString('hex');
@@ -31,13 +38,13 @@ const registerUser = async (req, res) => {
         await verificationToken.save();
 
         // Set up the email transporter using nodemailer
-        const transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
+        // const transporter = nodemailer.createTransport({
+        //     service: process.env.EMAIL_SERVICE,
+        //     auth: {
+        //         user: process.env.EMAIL_USER,
+        //         pass: process.env.EMAIL_PASS
+        //     }
+        // });
 
         // Email options for sending the verification link
         const mailOptions = {
@@ -67,9 +74,9 @@ const registerUser = async (req, res) => {
         // Send the verification email
         await transporter.sendMail(mailOptions);
 
-        res.status(200).json({ message: 'Registration successful, please check your email to verify your account.' });
+        
     } catch (error) {
-        res.status(500).json({ message: 'An error occurred during registration.', error: error.message });
+        res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 };
 

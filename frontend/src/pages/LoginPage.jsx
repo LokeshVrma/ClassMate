@@ -3,8 +3,6 @@ import InputField from "../components/InputField";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-
-
 const customStyle = {
     marginTop: 10 + "px", // Adjust margin for desired top position
     display: "flex", // Enable Flexbox
@@ -89,7 +87,6 @@ function LoginPage() {
                      onChange={(e) => setPassword(e.target.value)}
                     />
 
-                    <p className="password-desc">Must be at least 8 characters.</p>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     <div className="input-group-single">
                         <button className="submit-button" type="submit">Log In</button>
