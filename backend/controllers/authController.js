@@ -38,13 +38,13 @@ const registerUser = async (req, res) => {
         await verificationToken.save();
 
         // Set up the email transporter using nodemailer
-        // const transporter = nodemailer.createTransport({
-        //     service: process.env.EMAIL_SERVICE,
-        //     auth: {
-        //         user: process.env.EMAIL_USER,
-        //         pass: process.env.EMAIL_PASS
-        //     }
-        // });
+        const transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
 
         // Email options for sending the verification link
         const mailOptions = {
