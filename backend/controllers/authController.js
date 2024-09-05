@@ -143,19 +143,11 @@ const loginUser = async (req, res) => {
         const accessToken = jwt.sign(
             { userId: user._id, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: '15m' }
-        );
-
-        // Generate refresh token (long-lived)
-        const refreshToken = jwt.sign(
-            { userId: user._id, role: user.role },
-            process.env.JWT_REFRESH_SECRET,
-            { expiresIn: '30d' }
+            { expiresIn: '7d' }
         );
 
         // Send the new access token and refresh token as HTTP-only cookies
-        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Lax' });
 
         // Return a success response
         return res.status(200).json({ message: 'Logged in successfully',
@@ -163,34 +155,6 @@ const loginUser = async (req, res) => {
          });
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error', error: error.message });
-    }
-};
-
-// Refresh access token using the refresh token
-const refreshUserToken = async (req, res) => {
-    try {
-        const { refreshToken } = req.cookies;
-
-        if (!refreshToken) {
-            return res.status(401).json({ message: 'Refresh token not found, please log in again' });
-        }
-
-        // Verify the refresh token
-        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-
-        // Generate a new access token
-        const newAccessToken = jwt.sign(
-            { userId: decoded.userId, role: decoded.role },
-            process.env.JWT_SECRET,
-            { expiresIn: '15m' }
-        );
-
-        // Send the new access token as an HTTP-only cookie
-        res.cookie('accessToken', newAccessToken, { httpOnly: true, secure: true });
-
-        return res.status(200).json({ message: 'Access token refreshed successfully' });
-    } catch (error) {
-        return res.status(403).json({ message: 'Invalid refresh token' });
     }
 };
 
@@ -305,4 +269,4 @@ const logoutUser = (req, res) => {
     return res.status(200).json({ message: 'Logged out successfully' });
 };
 
-module.exports = { registerUser, verifyUser, loginUser, refreshUserToken, forgotPassword, verifyOtp, resetPassword, logoutUser };
+module.exports = { registerUser, verifyUser, loginUser, forgotPassword, verifyOtp, resetPassword, logoutUser };

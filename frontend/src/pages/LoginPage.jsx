@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputField from "../components/InputField";
-import axios from 'axios';
+import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import '../assets/styles/Auth.css';
 
@@ -21,6 +21,9 @@ function LoginPage() {
     const [password, setPassword] = useState(''); // State for password input
     const [error, setError] = useState(''); // State for error messages
 
+    // Hook for login function
+    const { login } = useAuth();
+
     // Hook for programmatic navigation
     const navigate = useNavigate();
 
@@ -30,12 +33,7 @@ function LoginPage() {
 
         try {
             // Send login request to the server
-            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, {
-                email,
-                password
-            }, {
-                withCredentials: true   // Send cookies with the request
-            });
+            await login(email, password);
 
             // If login is successful, navigate to the home page
             navigate('/');

@@ -20,7 +20,8 @@ const userProfile = async (req, res) => {
             name: user.name,
             studentId: user.studentID,
             profileImage: user.profileImage,
-            verified: user.verified
+            verified: user.verified,
+            role: user.role
         });
     } catch (error) {
         // Handle any errors that occur during the process
