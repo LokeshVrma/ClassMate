@@ -14,7 +14,7 @@ const verificationTokenSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 3600 // The token will automatically delete after 1 hour
+        expires: 600 // The token will automatically delete after 10 minutes
     }
 });
 
