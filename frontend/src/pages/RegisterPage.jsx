@@ -62,9 +62,9 @@ function RegisterPage() {
 
     return (
         <div className="auth-container">
-            <div className="branding-container" style={customStyle}>
+            <div className="intro-container" style={customStyle}>
                 <p className="branding">ClassMate</p>
-                <div className="branding-content">
+                <div className="intro-content">
                     <h1>Get Started with Us</h1>
                     <p>Complete these steps to register your account</p>
                     {/* Steps for registration process */}

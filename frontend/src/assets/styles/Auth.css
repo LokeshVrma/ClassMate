@@ -28,7 +28,7 @@ body {
 }
 
 /* Hidden branding content */
-.branding-content {
+.intro-content {
     display: none; /* Hide the branding content */
 }
 
@@ -307,7 +307,7 @@ input:focus {
     }
 
     /* Branding container styling for larger screens */
-    .branding-container {
+    .intro-container {
         background: rgb(255,255,255);
         background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(204,218,209,0.36691173051251746) 22%, rgba(204,218,209,1) 55%, rgba(156,174,161,1) 100%);
         flex: 1; /* Flex-grow to fill available space */
@@ -330,19 +330,19 @@ input:focus {
     }
 
     /* Show branding content on larger screens */
-    .branding-content {
+    .intro-content {
         display: block; /* Show branding content */
         margin-bottom: 20px; /* Bottom margin */
     }
 
     /* Adjusted heading and paragraph styling within branding content */
-    .branding-content h1 {
+    .intro-content h1 {
         font-size: 20px; /* Font size */
         font-weight: 500; /* Font weight */
         margin-bottom: 10px; /* Bottom margin */
     }
 
-    .branding-content p {
+    .intro-content p {
         font-size: 14px; /* Font size */
         margin-bottom: 20px; /* Bottom margin */
     }

@@ -62,9 +62,9 @@ function LoginPage() {
             <br />
             <br />
             <br />
-            <div className="branding-container" style={customStyle}>
+            <div className="intro-container" style={customStyle}>
                 <p className="branding">ClassMate</p>
-                <div className="branding-content">
+                <div className="intro-content">
                     <h1>Welcome Back</h1>
                     <p>Your gateway to ClassMate</p>
                 </div>

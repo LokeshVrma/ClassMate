@@ -18,43 +18,41 @@ const customStyle = window.innerWidth < 768 ? {
 };
 
 const ForgotPassword = () => {
-  // Set the document title
-  document.title = "Forgot Password | ClassMate"
+  document.title = "Forgot Password | ClassMate";
 
-  // State hooks for form data and UI
   const [email, setEmail] = useState(''); // State for email input
   const [error, setError] = useState(''); // State for error messages
   const [showOTPModal, setShowOTPModal] = useState(false); // State to control OTP modal visibility
   const [userId, setUserId] = useState(''); // State to store user ID from response
+  const [loading, setLoading] = useState(false); // State to control button text
 
-  // Handle form submission
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
+    setLoading(true); // Set loading state to true
+
     try {
-      // Make API request to send password reset email
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/forgot-password`, {
         email
       });
 
-      // On successful response, show OTP modal
       setUserId(response.data.userId);
-      setShowOTPModal(true);
-    }
-    catch (error) {
-      // Handle errors and set appropriate error message
+      setLoading(false); // Set loading state to false
+      setShowOTPModal(true); // Show OTP modal
+    } catch (error) {
+      setLoading(false); // Set loading state to false
       if (error.response && error.response.data) {
         setError(error.response.data.message);
       } else {
         setError('An unexpected error occurred.');
       }
     }
-  }
+  };
 
   return (
     <div className='auth-container'>
-      <div className='branding-container' style={customStyle}>
+      <div className='intro-container' style={customStyle}>
         <p className="branding">ClassMate</p>
-        <div className="branding-content">
+        <div className="intro-content">
           <h1>Forgot Password</h1>
           <p>Enter your email address to reset your password.</p>
         </div>
@@ -65,31 +63,32 @@ const ForgotPassword = () => {
           <h1>Reset Now</h1>
           <p className="desc">Enter your email to reset your password.</p>
           <InputField
-            label={'Enter your email'} // Label for the input field
-            type={'email'} // Input type for email
-            value={email} // Value of the input field
-            placeholder={'name@gmail.com'} // Placeholder text for the input field
-            onChange={(e) => setEmail(e.target.value)} // Update email state on change
+            label={'Enter your email'}
+            type={'email'}
+            value={email}
+            placeholder={'name@gmail.com'}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          
-          {error && <p style={{ color: 'red'}}>{error}</p> } {/* Display error message if any */}
+          {error && <p style={{ color: 'red'}}>{error}</p>}
           <div className='input-group-single'>
-            <button className='submit-button' type="submit">Send OTP</button> {/* Submit button */}
+            <button className='submit-button' type="submit" disabled={loading}>
+              {loading ? 'Sending...' : 'Send OTP'}
+            </button>
           </div>
-          <p className="already-account">Don't have an account? <a href="/register">Register Now!</a></p> {/* Link to registration page */}
+          <p className="already-account">Don't have an account? <a href="/register">Register Now!</a></p>
         </form>
       </div>
-      {/* Render OTP Modal if showOTPModal state is true */}
+
       {showOTPModal && (
         <OTPModal 
-          userId={userId} // Pass userId to OTPModal
-          setShowOTPModal={setShowOTPModal} // Function to close OTPModal
-          verifyUrl={`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-otp`} // URL for OTP verification
-          successRedirect={`/reset-password/${userId}`} // Redirect URL on successful OTP verification
+          userId={userId}
+          setShowOTPModal={setShowOTPModal}
+          verifyUrl={`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify-otp`}
+          successRedirect={`/reset-password/${userId}`}
         />
       )}
     </div>
-  )
+  );
 };
 
 export default ForgotPassword;

@@ -44,7 +44,7 @@ const ResetPasswordPage = () => {
 
   return (
     <div className="auth-container">
-      <div className="branding-container">
+      <div className="intro-container">
         <p className="branding">ClassMate</p> {/* Branding text */}
       </div>
 
