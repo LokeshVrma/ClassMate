@@ -14,6 +14,10 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+// docs
+const expressOasGenerator = require('express-oas-generator');
+expressOasGenerator.init(app, {});
+
 // Database Connection
 connectDB();
 
@@ -61,9 +65,4 @@ process.on('uncaughtException', (err) => {
 
 process.on('unhandledRejection', (err) => {
     console.error('Unhandled Rejection:', err);
-});
-
-connectDB().catch(err => {
-    console.error("Database connection error:", err);
-    process.exit(1); // Exit process if the database connection fails
 });

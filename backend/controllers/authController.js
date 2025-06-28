@@ -17,9 +17,9 @@ const registerUser = async (req, res) => {
             studentID: req.body.studentID,
             profileImage: req.body.profileImage,
         });
-        
-        const user = await User.findOne({ email:req.body.email });
-        if(!user) {
+
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
             const savedUser = await newUser.save();
             res.status(200).json({ message: 'Registration successful, please check your email to verify your account.', userId: savedUser._id });
         }
@@ -41,7 +41,9 @@ const registerUser = async (req, res) => {
 
         // Set up the email transporter using nodemailer
         const transporter = nodemailer.createTransport({
-            service: process.env.EMAIL_SERVICE,
+            host: process.env.EMAIL_HOST,
+            port: parseInt(process.env.EMAIL_PORT),
+            secure: process.env.EMAIL_SECURE === 'true',
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
@@ -70,7 +72,7 @@ const registerUser = async (req, res) => {
 
         // Send the verification email
         await transporter.sendMail(mailOptions);
-        
+
     } catch (error) {
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
@@ -150,9 +152,10 @@ const loginUser = async (req, res) => {
         res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Lax' });
 
         // Return a success response
-        return res.status(200).json({ message: 'Logged in successfully',
-            user: { id: user._id, name: user.name, role: user.role } 
-         });
+        return res.status(200).json({
+            message: 'Logged in successfully',
+            user: { id: user._id, name: user.name, role: user.role }
+        });
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error', error: error.message });
     }
