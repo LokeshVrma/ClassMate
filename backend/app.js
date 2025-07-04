@@ -12,11 +12,7 @@ require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-
-// docs
-const expressOasGenerator = require('express-oas-generator');
-expressOasGenerator.init(app, {});
+const PORT = 5000;
 
 // Database Connection
 connectDB();

@@ -47,7 +47,6 @@ ClassMate is a web application exclusively for college students, designed to be 
     EMAIL_SERVICE=gmail
     EMAIL_USER=your_email@gmail.com
     EMAIL_PASS=your_email_password
-    NODE_ENV=development
     ```
 
 4. **Run the backend server**:
