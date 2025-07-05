@@ -106,7 +106,7 @@ const Dashboard = () => {
             )}
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-800">
-                Welcome, {profile?.name?.split(" ")[0] || user?.name} 
+                Welcome, {profile?.name?.split(" ")[0] || user?.name}
               </h1>
               <p className="text-xs sm:text-sm text-gray-600">
                 Role: {profile?.role || user?.role}
@@ -163,8 +163,12 @@ const Dashboard = () => {
                   className="bg-white min-w-[120px] cursor-pointer rounded-xl shadow-md p-3 sm:p-5 flex flex-col items-center gap-2 hover:shadow-lg hover:scale-105 transition transform duration-200 ease-in-out"
                   aria-label={`Navigate to ${f.title}`}
                 >
-                  <div className="text-3xl sm:text-4xl text-blue-600">{f.icon}</div>
-                  <p className="text-sm sm:text-base font-semibold text-gray-800">{f.title}</p>
+                  <div className="text-3xl sm:text-4xl text-blue-600">
+                    {f.icon}
+                  </div>
+                  <p className="text-sm sm:text-base font-semibold text-gray-800">
+                    {f.title}
+                  </p>
                 </div>
               ))}
             </section>
@@ -201,7 +205,9 @@ const StatCard = ({ label, value }) => (
 const AssignmentCard = ({ assignment }) => (
   <div className="border rounded-lg p-4 shadow flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
     <div>
-      <h3 className="text-base sm:text-lg font-semibold text-gray-800">{assignment.title}</h3>
+      <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+        {assignment.title}
+      </h3>
       <p className="text-sm text-gray-600 mt-1">
         {assignment.subject || "No subject"}
       </p>
