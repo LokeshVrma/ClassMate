@@ -28,10 +28,11 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+const authLimiter = rateLimit({ windowMs: 60 * 1000, max: 5 });
+
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/study-plans', studyPlansRoutes);
 app.use('/api/assignments', assignmentRoutes);

@@ -37,7 +37,7 @@ const getAllForums = async (req, res) => {
 
         // If no forums are found, return a 404 response
         if (forums.length === 0) {
-            return res.status(404).json({ message: 'No forums found' });
+            return res.status(200).json({ message: 'No forums found' });
         }
 
         // Return the forums array
