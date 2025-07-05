@@ -9,74 +9,75 @@ require('dotenv').config();
 // Register a new user
 const registerUser = async (req, res) => {
     try {
-        // Create a new user with hashed password
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(409).json({ message: "User already exists" });
+        }
+
+        // Create and save new user
         const newUser = new User({
             email: req.body.email,
-            password: await bcrypt.hash(req.body.password, 12), // Hash the password
+            password: await bcrypt.hash(req.body.password, 12),
             name: req.body.name,
             studentID: req.body.studentID,
             profileImage: req.body.profileImage,
         });
 
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            const savedUser = await newUser.save();
-            res.status(200).json({ message: 'Registration successful, please check your email to verify your account.', userId: savedUser._id });
-        }
-        else {
-            return res.status(409).json({ message: "User already exists" });
-        }
+        const savedUser = await newUser.save();
 
-        // Generate a 6-digit OTP
+        // ✅ Now continue with OTP logic (after saving)
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Save the OTP and expiration time in the VerificationToken model
         const verificationToken = new VerificationToken({
-            userId: newUser._id,
+            userId: savedUser._id,
             token: otp,
-            expiresAt: Date.now() + 10 * 60 * 1000  //OTP valid for 10 minutes
+            expiresAt: Date.now() + 10 * 60 * 1000,
         });
 
         await verificationToken.save();
 
-        // Set up the email transporter using nodemailer
         const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
-            port: parseInt(process.env.EMAIL_PORT),
-            secure: process.env.EMAIL_SECURE === 'true',
+            service: "gmail",
             auth: {
                 user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
+                pass: process.env.EMAIL_PASS,
+            },
         });
 
-        // Email options for sending OTP
+
         const mailOptions = {
             from: `"ClassMate" <${process.env.EMAIL_USER}>`,
-            to: newUser.email,
+            to: savedUser.email,
             subject: 'Your OTP for ClassMate Verification',
             html: `
-                <div style="font-family: Arial, sans-serif; color: #333;">
-                    <h1 style="color: #5B99C2;">Welcome to ClassMate, ${newUser.name}!</h1>
-                    <p>Your OTP for email verification is:</p>
-                    <div style="text-align: center; margin: 20px 0;">
-                        <h2 style="color: #4CAF50;">${otp}</h2>
-                    </div>
-                    <p>Please enter this OTP within 10 minutes to verify your email address.</p>
-                    <br>
-                    <p>Best regards,</p>
-                    <p>The ClassMate Team</p>
-                </div>
-            `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <h1 style="color: #5B99C2;">Welcome to ClassMate, ${savedUser.name}!</h1>
+          <p>Your OTP for email verification is:</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <h2 style="color: #4CAF50;">${otp}</h2>
+          </div>
+          <p>Please enter this OTP within 10 minutes to verify your email address.</p>
+          <br>
+          <p>Best regards,</p>
+          <p>The ClassMate Team</p>
+        </div>
+      `,
         };
 
-        // Send the verification email
         await transporter.sendMail(mailOptions);
 
+
+        res.status(200).json({
+            message: 'Registration successful, please check your email to verify your account.',
+            userId: savedUser._id,
+        });
+
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 };
+
 
 // Verify the user's email using the OTP
 const verifyUser = async (req, res) => {
@@ -229,7 +230,6 @@ const verifyOtp = async (req, res) => {
     try {
         const { userId, otp } = req.body;
         const verificationToken = await VerificationToken.findOne({ userId, token: otp });
-        console.log(verificationToken)
 
         if (!verificationToken) {
             return res.status(400).json({ message: 'Invalid or expired OTP' });
