@@ -8,6 +8,8 @@ const studyPlansRoutes = require('./routes/studyPlans');
 const assignmentRoutes = require('./routes/assignments');
 const notesRoutes = require('./routes/notes');
 const forumsRoutes = require('./routes/forums');
+const rateLimit = require("express-rate-limit");
+
 require('dotenv').config();
 
 const app = express();
@@ -26,9 +28,11 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+const authLimiter = rateLimit({ windowMs: 60 * 1000, max: 5 });
+
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/study-plans', studyPlansRoutes);
 app.use('/api/assignments', assignmentRoutes);
